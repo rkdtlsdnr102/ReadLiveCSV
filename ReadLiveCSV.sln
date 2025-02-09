@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlotCSV", "PlotCSV\PlotCSV.csproj", "{35DD8F74-934C-48A9-BA53-04336B3D0300}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35DD8F74-934C-48A9-BA53-04336B3D0300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35DD8F74-934C-48A9-BA53-04336B3D0300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35DD8F74-934C-48A9-BA53-04336B3D0300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35DD8F74-934C-48A9-BA53-04336B3D0300}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {628CA1EF-3EF6-465A-9A58-67AC62FD1B27}
+	EndGlobalSection
+EndGlobal
