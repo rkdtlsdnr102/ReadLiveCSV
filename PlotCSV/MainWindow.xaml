@@ -9,13 +9,10 @@
         Title="MainWindow" Height="450" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250*"/>
-            <ColumnDefinition Width="250*"/>
-            <ColumnDefinition Width="250*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer x:Name="txtBlockScrollViewer" Height="288" Margin="0,1,0,130" Grid.Column="3">
-            <TextBlock x:Name="txtBlockReadSerial" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="TextBlock" />
-        </ScrollViewer>
 
         <!-- gyro section-->
         <lvc:CartesianChart Name="gyro_x" Margin="0,0,0,285" Grid.Column="0">
@@ -29,7 +26,7 @@
                 <lvc:Axis Title="Gyro Value X" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <lvc:CartesianChart Name="gyro_y" Margin="0,139,0,130" Height="150" Grid.Column="0">
+        <lvc:CartesianChart Name="gyro_y" Margin="0,139,0,130" Grid.Column="0">
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding m_GyroValuesY}" Title="Gyro Data"/>
             </lvc:CartesianChart.Series>
@@ -64,7 +61,7 @@
                 <lvc:Axis Title="PID Value X" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <lvc:CartesianChart Name="pid_y" Margin="0,139,0,130" Height="150" Grid.Column="1" Grid.ColumnSpan="1">
+        <lvc:CartesianChart Name="pid_y" Margin="0,139,0,130" Grid.Column="1" Grid.ColumnSpan="1">
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding m_PidValuesY}" Title="PID Data"/>
             </lvc:CartesianChart.Series>
@@ -86,7 +83,11 @@
                 <lvc:Axis Title="PID Value Z" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <Button x:Name="btnPortOpen" Content="포트 읽기" Grid.Column="3" HorizontalAlignment="Left" Margin="10,314,0,0" VerticalAlignment="Top" Width="75" Click="btnPortOpen_Click" />
-        <Button x:Name="btnPortClose" Content="포트 끄기" Grid.Column="3" HorizontalAlignment="Left" Margin="113,314,0,0" VerticalAlignment="Top" Width="75" Click="btnPortClose_Click" />
+        <Button x:Name="btnPortOpen" Content="포트 읽기" Grid.Column="2" HorizontalAlignment="Left" Margin="46,353,0,0" VerticalAlignment="Top" Width="75" Click="btnPortOpen_Click" />
+        <Button x:Name="btnPortClose" Content="포트 끄기" Grid.Column="2" HorizontalAlignment="Left" Margin="217,353,0,0" VerticalAlignment="Top" Width="75" Click="btnPortClose_Click" />
+        <TextBox x:Name="txtbox" Grid.Column="2" HorizontalAlignment="Left" Height="304" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="330" RenderTransformOrigin="0.733,0.652" VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
+        <TextBox x:Name="txtBoxSerialWrite" Grid.Column="2" HorizontalAlignment="Left" Height="26" Margin="46,313,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="204" TextChanged="txtBoxSerialWrite_TextChanged"/>
+        <Button x:Name="btnSendSerialData" Content="전송" Grid.Column="2" HorizontalAlignment="Left" Margin="255,313,0,0" VerticalAlignment="Top" Width="75" Height="26" Click="btnSendSerialData_Click"/>
+        <Label Content="입력" Grid.Column="2" HorizontalAlignment="Left" Margin="5,313,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

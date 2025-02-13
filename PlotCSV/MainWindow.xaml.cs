@@ -24,7 +24,11 @@ namespace PlotCSV
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static int AxisLengthX { get; set; }
+        public static int MaxTextLength { get; set; }
+
         private SerialPort m_SerialPort;
+        private string m_SerialData;
         public ChartValues<double> m_GyroValuesX { get; set; }
         public ChartValues<double> m_GyroValuesY { get; set; }
         public ChartValues<double> m_GyroValuesZ { get; set; }
@@ -42,6 +46,10 @@ namespace PlotCSV
             m_PidValuesY = new ChartValues<double>();
             m_PidValuesZ = new ChartValues<double>();
             DataContext = this;
+
+            AxisLengthX = 25;
+            MaxTextLength = 500;
+            m_SerialData = null;
 
             InitializeComponent();                           
         }
@@ -129,6 +137,9 @@ namespace PlotCSV
 
                             foreach (double value in values)
                             {
+                                if (AxisLengthX == lists[chartIndex].Count)
+                                    lists[chartIndex].RemoveAt(0);
+
                                 lists[chartIndex].Add(value);
 
                                 chartIndex = (chartIndex + 1) % nNumChart;
@@ -145,6 +156,9 @@ namespace PlotCSV
 
                             foreach (double value in values)
                             {
+                                if (AxisLengthX == lists[chartIndex].Count)
+                                    lists[chartIndex].RemoveAt(0);
+
                                 lists[chartIndex].Add(value);
 
                                 chartIndex = (chartIndex + 1) % nNumChart;
@@ -155,11 +169,39 @@ namespace PlotCSV
                     default:
                         break;
                 }
-            }
 
-            // serial에서 읽은 데이터 모두 TextBlock에 저장
-            txtBlockReadSerial.Text += data;
-            txtBlockScrollViewer.ScrollToVerticalOffset(txtBlockScrollViewer.ExtentHeight);
+                // serial에서 읽은 데이터 모두 TextBlock에 저장
+                if(CDataParser.eRecordType.pid == recType)
+                {
+                    txtbox.AppendText(data + Environment.NewLine);
+
+                    if (MaxTextLength < txtbox.Text.Length)
+                    {
+                        txtbox.Text = txtbox.Text.Substring(txtbox.Text.Length - MaxTextLength);
+                    }
+
+                    txtbox.ScrollToEnd();
+                }
+            }
+        }
+
+        private void txtBoxSerialWrite_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (0 < txtBoxSerialWrite.Text.Length)
+                m_SerialData = txtBoxSerialWrite.Text;
+        }
+
+        private void btnSendSerialData_Click(object sender, RoutedEventArgs e)
+        {
+            if( false == m_SerialPort.IsOpen)
+            {
+                MessageBox.Show(string.Format("시리얼 포트가 열려있지 않습니다."));
+            }
+            else
+            {
+                if( null != m_SerialData)
+                    m_SerialPort.Write(m_SerialData);
+            }
         }
     }
 }
