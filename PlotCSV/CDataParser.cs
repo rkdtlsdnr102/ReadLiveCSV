@@ -13,6 +13,9 @@ namespace PlotCSV
             invalid = 0,
             gyro,
             pid,
+            motor,
+            dt,// 단위 경과 시간
+            eAngle, // 위치 각도 에러값
             max
         };
 
@@ -45,6 +48,24 @@ namespace PlotCSV
                 case "pid":
                     {
                         recordType = eRecordType.pid;
+                    }
+                    break;
+
+                case "motor":
+                    {
+                        recordType = eRecordType.motor;
+                    }
+                    break;
+
+                case "dt":
+                    {
+                        recordType = eRecordType.dt;
+                    }
+                    break;
+
+                case "eangle":
+                    {
+                        recordType = eRecordType.eAngle;
                     }
                     break;
 

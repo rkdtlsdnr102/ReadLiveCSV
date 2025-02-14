@@ -29,6 +29,8 @@ namespace PlotCSV
 
         private SerialPort m_SerialPort;
         private string m_SerialData;
+        private bool m_bAutoScroll;
+        private CDataParser.eRecordType m_CurrentParsingRecordType;
         public ChartValues<double> m_GyroValuesX { get; set; }
         public ChartValues<double> m_GyroValuesY { get; set; }
         public ChartValues<double> m_GyroValuesZ { get; set; }
@@ -39,6 +41,8 @@ namespace PlotCSV
 
         public MainWindow()
         {
+            InitializeComponent();
+
             m_GyroValuesX = new ChartValues<double>();
             m_GyroValuesY = new ChartValues<double>();
             m_GyroValuesZ = new ChartValues<double>();
@@ -48,10 +52,27 @@ namespace PlotCSV
             DataContext = this;
 
             AxisLengthX = 25;
-            MaxTextLength = 500;
+            MaxTextLength = 50000;
             m_SerialData = null;
 
-            InitializeComponent();                           
+            // enum 값을 listview에 추가
+            List<CDataParser.eRecordType> enumValues = Enum.GetValues(typeof(CDataParser.eRecordType)).Cast<CDataParser.eRecordType>().ToList();
+
+            SerialValueListView.ItemsSource = enumValues;
+            SerialValueListView.SelectedIndex = 0;
+
+            if( null == SerialValueListView.SelectedItem)
+            {
+                m_CurrentParsingRecordType = CDataParser.eRecordType.invalid;
+            }
+            else
+            {
+                m_CurrentParsingRecordType = (CDataParser.eRecordType)SerialValueListView.SelectedItem;
+            }
+
+            // auto scroll 값 설정, 기본값 on
+            m_bAutoScroll = true;
+            SetAutoScrollLabelText(m_bAutoScroll);
         }
 
         
@@ -73,8 +94,8 @@ namespace PlotCSV
             {
                 m_SerialPort = new SerialPort(dlgPortSetting.ComName, dlgPortSetting.BaudRate, Parity.None, 8, StopBits.One);
                 m_SerialPort.DataReceived += SerialDataReceived;
-                m_SerialPort.ReadBufferSize = 8192;
-                m_SerialPort.WriteBufferSize = 8192;
+                m_SerialPort.ReadBufferSize = 50000;
+                m_SerialPort.WriteBufferSize = 50000;
                 m_SerialPort.Handshake = Handshake.RequestToSend;
                 m_SerialPort.RtsEnable = true;
                 m_SerialPort.DtrEnable = true;
@@ -171,7 +192,7 @@ namespace PlotCSV
                 }
 
                 // serial에서 읽은 데이터 모두 TextBlock에 저장
-                if(CDataParser.eRecordType.pid == recType)
+                if(m_CurrentParsingRecordType == recType)
                 {
                     txtbox.AppendText(data + Environment.NewLine);
 
@@ -180,7 +201,8 @@ namespace PlotCSV
                         txtbox.Text = txtbox.Text.Substring(txtbox.Text.Length - MaxTextLength);
                     }
 
-                    txtbox.ScrollToEnd();
+                    if( true == m_bAutoScroll)
+                        txtbox.ScrollToEnd();
                 }
             }
         }
@@ -201,6 +223,35 @@ namespace PlotCSV
             {
                 if( null != m_SerialData)
                     m_SerialPort.Write(m_SerialData);
+            }
+        }
+
+        private void SerialValueListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = SerialValueListView.SelectedItem;
+
+            if (null != selectedItem)
+            {
+                m_CurrentParsingRecordType = (CDataParser.eRecordType)selectedItem;
+            }
+        }
+
+        private void btnAutoScroll_Click(object sender, RoutedEventArgs e)
+        {
+            m_bAutoScroll = !m_bAutoScroll;
+
+            SetAutoScrollLabelText(m_bAutoScroll);
+        }
+
+        private void SetAutoScrollLabelText( bool bAutoScroll )
+        {
+            if (true == bAutoScroll)
+            {
+                labelAutoScrollStatus.Content = "On";
+            }
+            else
+            {
+                labelAutoScrollStatus.Content = "Off";
             }
         }
     }
