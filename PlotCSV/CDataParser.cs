@@ -12,10 +12,17 @@ namespace PlotCSV
         {
             invalid = 0,
             gyro,
+            gyro_calib,
+            accel,
+            accel_calib,
             pid,
             motor,
             dt,// 단위 경과 시간
             eAngle, // 위치 각도 에러값
+            angle_val,
+            cur_pos,
+            rollAcc,
+            pitchAcc,
             max
         };
 
@@ -45,6 +52,12 @@ namespace PlotCSV
                     }
                     break;
 
+                case "gyro_calib":
+                    {
+                        recordType = eRecordType.gyro_calib;
+                    }
+                    break;
+
                 case "pid":
                     {
                         recordType = eRecordType.pid;
@@ -66,6 +79,40 @@ namespace PlotCSV
                 case "eangle":
                     {
                         recordType = eRecordType.eAngle;
+                    }
+                    break;
+
+                case "accel":
+                    {
+                        recordType = eRecordType.accel;
+                    }
+                    break;
+
+                case "accel_calib":
+                    {
+                        recordType = eRecordType.accel_calib;
+                    }
+                    break;
+
+                case "angle_val":
+                    {
+                        recordType = eRecordType.angle_val;
+                    }
+                    break;
+
+                case "cur_pos":
+                    {
+                        recordType = eRecordType.cur_pos;
+                    }
+                    break;
+                case "rollacc":
+                    {
+                        recordType = eRecordType.rollAcc;
+                    }
+                    break;
+                case "pitchacc":
+                    {
+                        recordType = eRecordType.pitchAcc;
                     }
                     break;
 

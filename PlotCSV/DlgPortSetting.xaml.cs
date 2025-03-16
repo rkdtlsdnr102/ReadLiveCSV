@@ -24,9 +24,21 @@ namespace PlotCSV
         public int BaudRate { get; set; }
         public string ComName { get; set; }
 
+        private readonly string _m_RegComName = "PORT";
+        private readonly string _m_RegBaudRate = "BAUDRATE";
+        public ICommand m_cmdLoadLastPortSetting
+        {
+            get
+            {
+                return new RelayCommand(LoadLastPortSetting);
+            }
+        }
+
         public DlgPortSetting()
         {
-            InitializeComponent();
+            InitializeComponent();                    
+            DataContext = this;
+
         }
 
         private void TextBoxBaudRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -38,7 +50,31 @@ namespace PlotCSV
             int.TryParse(TextBoxBaudRate.Text,out int baudrate);
             BaudRate = baudrate;
             ComName = TextBoxPortName.Text;
+
             Close();
+        }
+
+        public void SavePortSetting( string comName, int baudRate)
+        {
+            RegistryManager registryManager = RegistryManager.Instance;
+
+            registryManager.SetKeyValue(_m_RegComName, comName);
+            registryManager.SetKeyValue(_m_RegBaudRate, Convert.ToString(baudRate));
+        }
+
+        private void LoadLastPortSetting(object obj)
+        {
+            RegistryManager registryManager = RegistryManager.Instance;
+
+            string comName, baudRate;
+
+            if (true == registryManager.GetKeyValue(_m_RegComName, out comName) &&
+                true == registryManager.GetKeyValue(_m_RegBaudRate, out baudRate))
+            {
+                TextBoxPortName.Text = comName;
+                TextBoxBaudRate.Text = baudRate;
+            }
+
         }
     }
 }

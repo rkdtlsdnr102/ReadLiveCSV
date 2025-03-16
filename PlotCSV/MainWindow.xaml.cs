@@ -94,13 +94,16 @@ namespace PlotCSV
             {
                 m_SerialPort = new SerialPort(dlgPortSetting.ComName, dlgPortSetting.BaudRate, Parity.None, 8, StopBits.One);
                 m_SerialPort.DataReceived += SerialDataReceived;
-                m_SerialPort.ReadBufferSize = 50000;
-                m_SerialPort.WriteBufferSize = 50000;
+                m_SerialPort.ReadBufferSize = 115200;
+                m_SerialPort.WriteBufferSize = 115200;
                 m_SerialPort.Handshake = Handshake.RequestToSend;
                 m_SerialPort.RtsEnable = true;
                 m_SerialPort.DtrEnable = true;
 
-                m_SerialPort.Open();            
+                m_SerialPort.Open();
+
+                // registry에 port, baudrate 저장
+                dlgPortSetting.SavePortSetting(dlgPortSetting.ComName, dlgPortSetting.BaudRate);
             }
             catch (Exception ex)
             {
