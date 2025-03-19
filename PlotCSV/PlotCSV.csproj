@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DEVELOPE_MANAGE_SERIAL_DATA; DEVELOPE_MANAGE_REGISTRY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DEVELOPE_MANAGE_SERIAL_DATA; DEVELOPE_MANAGE_REGISTRY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -62,7 +62,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CmdLoadLastSerialPort.cs" />
-    <Compile Include="CSerialWriter.cs" />
+    <Compile Include="CSerialMessage.cs" />
+    <Compile Include="RegexChecker.cs" />
+    <Compile Include="RegistryData.cs" />
     <Compile Include="RegistryManager.cs" />
     <Page Include="DlgPortSetting.xaml">
       <SubType>Designer</SubType>

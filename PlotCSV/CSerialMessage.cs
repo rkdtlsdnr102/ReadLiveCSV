@@ -7,39 +7,25 @@ using System.Runtime.InteropServices;
 
 namespace PlotCSV
 {
-    public class CSerialWriter
+    public class CSerialMessage
     {
 
-        public enum eMsgType : byte
-        {
-            invalid = 0,
-            recalib,
-            motorspeed,
-            set_anglepid,
-            set_angleSpeedPid,
-            max
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct Msg
+        public struct Msg
         {
-            eMsgType msgType;
 
             // motorSpeed value
-            byte motorSpeedA;
-            byte motorSpeedB;
-            byte motorSpeedC;
-            byte motorSpeedD;
+            public byte motorSpeed;      
 
             // angle pid, 1000단위
-            int angleKp;
-            int angleKi;
-            int angleKd;
+            public uint angleKp;
+            public uint angleKi;
+            public uint angleKd;
 
             // angleSpeed pid, 1000단위
-            int angleSpeedKp;
-            int angleSpeedKi;
-            int angleSpeedKd;
+            public uint angleSpeedKp;
+            public uint angleSpeedKi;
+            public uint angleSpeedKd;
 
         }
 
@@ -68,7 +54,7 @@ namespace PlotCSV
         //////////////////////////////////////////////////
         // public function
         //////////////////////////////////////////////////
-        public byte[] Serialize( Msg msg)
+        static public byte[] Serialize(Msg msg)
         {
             return GetBytes(msg);
         }

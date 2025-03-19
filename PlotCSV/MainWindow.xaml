@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PlotCSV"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="663" Width="990">
+        Title="MainWindow" Height="1070" Width="1555.425">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -28,7 +28,7 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Gyro Value X" />
+                <lvc:Axis Title="Gyro Value X" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Name="gyro_y" Margin="0,3,0,0" Grid.Column="0" Grid.Row="1">
@@ -39,7 +39,7 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Gyro Value Y" />
+                <lvc:Axis Title="Gyro Value Y" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Name="gyro_z" Grid.Column="0" Grid.Row="2">
@@ -50,7 +50,7 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Gyro Value Z" />
+                <lvc:Axis Title="Gyro Value Z" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
 
@@ -63,7 +63,7 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="PID Value X" />
+                <lvc:Axis Title="PID Value X" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Name="pid_y" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1">
@@ -74,7 +74,7 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="PID Value Y" />
+                <lvc:Axis Title="PID Value Y" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
         <lvc:CartesianChart Name="pid_z" Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2">
@@ -85,18 +85,51 @@
                 <lvc:Axis Title="Time"/>
             </lvc:CartesianChart.AxisX>
             <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="PID Value Z" />
+                <lvc:Axis Title="PID Value Z" MinValue="-360" MaxValue="360" />
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
-        <Button x:Name="btnPortOpen" Content="포트 읽기" Grid.Column="2" HorizontalAlignment="Left" Margin="31,88.5,0,0" VerticalAlignment="Top" Width="75" Click="btnPortOpen_Click" Grid.Row="2" Height="20" />
-        <Button x:Name="btnPortClose" Content="포트 끄기" Grid.Column="2" HorizontalAlignment="Left" Margin="31,114.5,0,0" VerticalAlignment="Top" Width="75" Click="btnPortClose_Click" Grid.Row="2" Height="20" />
-        <TextBox x:Name="txtbox" Grid.Column="2" HorizontalAlignment="Left" Height="421" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="330" RenderTransformOrigin="0.733,0.652" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Margin="0,0,-3,0" Grid.RowSpan="2"/>
-        <TextBox x:Name="txtBoxSerialWrite" Grid.Column="2" HorizontalAlignment="Left" Height="26" Margin="46,39.5,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="204" TextChanged="txtBoxSerialWrite_TextChanged" Grid.Row="2"/>
-        <Button x:Name="btnSendSerialData" Content="전송" Grid.Column="2" HorizontalAlignment="Left" Margin="255,40.5,-3,0" VerticalAlignment="Top" Width="75" Height="26" Click="btnSendSerialData_Click" Grid.Row="2"/>
-        <Label Content="입력" Grid.Column="2" HorizontalAlignment="Left" Margin="5,40.5,0,0" VerticalAlignment="Top" Grid.Row="2" Height="26" Width="34"/>
-        <ListView x:Name="SerialValueListView" Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="121,88.5,0,0" Grid.Row="2" VerticalAlignment="Top" Width="100" MouseDoubleClick="SerialValueListView_MouseDoubleClick">
-        </ListView>
-        <Button x:Name="btnAutoScroll" Content="자동스크롤" Grid.Column="2" HorizontalAlignment="Left" Margin="175,4.5,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Click="btnAutoScroll_Click"/>
-        <Label x:Name="labelAutoScrollStatus" Content="Label" Grid.Column="2" HorizontalAlignment="Left" Margin="255,2.5,0,0" Grid.Row="2" VerticalAlignment="Top" Width="72"/>
+        <Button x:Name="btnPortOpen" Content="포트 읽기" Grid.Column="2" HorizontalAlignment="Left" Margin="10,292,0,0" VerticalAlignment="Top" Width="75" Click="btnPortOpen_Click" Grid.Row="1" Height="20" />
+        <Button x:Name="btnPortClose" Content="포트 끄기" Grid.Column="2" HorizontalAlignment="Left" Margin="90,292,0,0" VerticalAlignment="Top" Width="75" Click="btnPortClose_Click" Grid.Row="1" Height="20" />
+        <TextBox x:Name="txtbox" Grid.Column="2" HorizontalAlignment="Left" Height="628" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="516" RenderTransformOrigin="0.733,0.652" VerticalScrollBarVisibility="Visible" IsReadOnly="True" Grid.RowSpan="2"/>
+        <Button x:Name="btnAutoScroll" Content="자동스크롤" Grid.Column="2" HorizontalAlignment="Left" Margin="323,289,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="btnAutoScroll_Click"/>
+        <Label x:Name="labelAutoScrollStatus" Content="Label" Grid.Column="2" HorizontalAlignment="Left" Margin="403,287,0,0" Grid.Row="1" VerticalAlignment="Top" Width="72" RenderTransformOrigin="0.444,-4.385"/>
+        <Grid Grid.Column="2" HorizontalAlignment="Left" Height="346" Grid.Row="2" VerticalAlignment="Top" Width="516">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="43*"/>
+                <RowDefinition Height="45*"/>
+                <RowDefinition Height="137*"/>
+                <RowDefinition Height="121*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="59*"/>
+                <ColumnDefinition Width="70*"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="SerialValueListView" Height="237" VerticalAlignment="Top" MouseDoubleClick="SerialValueListView_MouseDoubleClick" HorizontalAlignment="Left" Width="198" Margin="10,0,0,0" Grid.RowSpan="3" Grid.Row="1"/>
+            <Label Content="Serial 읽기" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="109" RenderTransformOrigin="0.33,0.156"/>
+
+            <Label Content="Serial 쓰기" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="109" Margin="0,-2,0,0" Grid.Column="1"/>
+            <TextBox x:Name="txtBoxMotorSpeed" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,3,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1" RenderTransformOrigin="0.456,1.565" PreviewTextInput="txtBoxMotorSpeed_PreviewTextInput"/>
+
+            <Label Content="MotorSpeed :" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,3,0,0" Grid.Column="1" Grid.Row="1"/>
+            <TextBox x:Name="txtBoxAnglePTerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,33,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2" PreviewTextInput="txtBoxAnglePTerm_PreviewTextInput"/>
+
+            <Label Content="각도 PID 셋팅(0.001단위)" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="223" Margin="0,1,0,0" Grid.Column="1" Grid.Row="2"/>
+            <Label Content="P Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,33,0,0" Grid.Column="1" Grid.Row="2"/>
+            <TextBox x:Name="txtBoxAngleITerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2" PreviewTextInput="txtBoxAngleITerm_PreviewTextInput"/>
+            <Label Content="I Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,61,0,0" Grid.Column="1" Grid.Row="2"/>
+            <TextBox x:Name="txtBoxAngleDTerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="2" PreviewTextInput="txtBoxAngleDTerm_PreviewTextInput"/>
+            <Label Content="D Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,89,0,0" Grid.Column="1" Grid.Row="2"/>
+
+            <Label Content="각속도 PID 셋팅(0.001단위)" HorizontalAlignment="Left" VerticalAlignment="Top" Height="32" Width="223" Grid.Column="1" Grid.Row="3"/>
+            <TextBox x:Name="txtBoxAngleSpeedPTerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="3" PreviewTextInput="txtBoxAngleSpeedPTerm_PreviewTextInput"/>
+            <Label Content="P Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,32,0,0" Grid.Column="1" Grid.Row="3"/>
+            <TextBox x:Name="txtBoxAngleSpeedITerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,60,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="3" PreviewTextInput="txtBoxAngleSpeedITerm_PreviewTextInput"/>
+            <Label Content="I Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,60,0,0" Grid.Column="1" Grid.Row="3"/>
+            <TextBox x:Name="txtBoxAngleSpeedDTerm" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="103,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="3" PreviewTextInput="txtBoxAngleSpeedDTerm_PreviewTextInput"/>
+            <Label Content="D Term" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Width="93" Margin="10,88,0,0" Grid.Column="1" Grid.Row="3"/>
+
+        </Grid>
+        <Button x:Name="btnSend" Content="Send" Grid.Column="2" HorizontalAlignment="Left" Margin="431,1,0,0" VerticalAlignment="Top" Width="75" Click="btnSendSerialData_Click" Grid.Row="2" Height="20" />
+        <Button x:Name="btnSaveSetting" Content="저장" Grid.Column="2" HorizontalAlignment="Left" Margin="380,1,0,0" VerticalAlignment="Top" Width="46" Click="btnSaveSetting_Click" Grid.Row="2" Height="20" />
     </Grid>
 </Window>

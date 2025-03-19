@@ -28,7 +28,10 @@ namespace PlotCSV
         public static int MaxTextLength { get; set; }
 
         private SerialPort m_SerialPort;
+#if DEVELOPE_MANAGE_SERIAL_DATA
+#else
         private string m_SerialData;
+#endif
         private bool m_bAutoScroll;
         private CDataParser.eRecordType m_CurrentParsingRecordType;
         public ChartValues<double> m_GyroValuesX { get; set; }
@@ -53,7 +56,11 @@ namespace PlotCSV
 
             AxisLengthX = 25;
             MaxTextLength = 50000;
+#if DEVELOPE_MANAGE_SERIAL_DATA
+            m_SerialPort = null;
+#else
             m_SerialData = null;
+#endif
 
             // enum 값을 listview에 추가
             List<CDataParser.eRecordType> enumValues = Enum.GetValues(typeof(CDataParser.eRecordType)).Cast<CDataParser.eRecordType>().ToList();
@@ -73,8 +80,28 @@ namespace PlotCSV
             // auto scroll 값 설정, 기본값 on
             m_bAutoScroll = true;
             SetAutoScrollLabelText(m_bAutoScroll);
-        }
 
+            // ui 기본값 셋팅
+            {
+                // 모터 속도
+                txtBoxMotorSpeed.Text = Convert.ToString(0);
+
+                RegistryData regData = RegistryData.GetInstance();
+
+                regData.Load();
+
+                // 각도 pid
+                txtBoxAnglePTerm.Text = Convert.ToString(regData.RegAnglePidP);
+                txtBoxAngleITerm.Text = Convert.ToString(regData.RegAnglePidI);
+                txtBoxAngleDTerm.Text = Convert.ToString(regData.RegAnglePidD);
+
+                // 각속도 pid
+                txtBoxAngleSpeedPTerm.Text = Convert.ToString(regData.RegAngleSpeedPidP);
+                txtBoxAngleSpeedITerm.Text = Convert.ToString(regData.RegAngleSpeedPidI);
+                txtBoxAngleSpeedDTerm.Text = Convert.ToString(regData.RegAngleSpeedPidD);
+            }
+            
+        }
         
 
         private void btnPortOpen_Click(object sender, RoutedEventArgs e)
@@ -101,9 +128,6 @@ namespace PlotCSV
                 m_SerialPort.DtrEnable = true;
 
                 m_SerialPort.Open();
-
-                // registry에 port, baudrate 저장
-                dlgPortSetting.SavePortSetting(dlgPortSetting.ComName, dlgPortSetting.BaudRate);
             }
             catch (Exception ex)
             {
@@ -152,7 +176,7 @@ namespace PlotCSV
                 // pid 또는 gyro차트값에 넣어줌
                 switch (recType)
                 {
-                    case CDataParser.eRecordType.gyro:
+                    case CDataParser.eRecordType.gyro_calib:
                         {
                             ChartValues<double>[] lists = new ChartValues<double>[] { m_GyroValuesX, m_GyroValuesY, m_GyroValuesZ };
 
@@ -210,24 +234,61 @@ namespace PlotCSV
             }
         }
 
-        private void txtBoxSerialWrite_TextChanged(object sender, TextChangedEventArgs e)
+        private void btnSaveSetting_Click(object sender, RoutedEventArgs e)
         {
-            if (0 < txtBoxSerialWrite.Text.Length)
-                m_SerialData = txtBoxSerialWrite.Text;
+            RegistryData regData = RegistryData.GetInstance();
+
+            regData.RegAnglePidP = Convert.ToUInt32(txtBoxAnglePTerm.Text);
+            regData.RegAnglePidI = Convert.ToUInt32(txtBoxAngleITerm.Text);
+            regData.RegAnglePidD = Convert.ToUInt32(txtBoxAngleDTerm.Text);
+
+            regData.RegAngleSpeedPidP = Convert.ToUInt32(txtBoxAngleSpeedPTerm.Text);
+            regData.RegAngleSpeedPidI = Convert.ToUInt32(txtBoxAngleSpeedITerm.Text);
+            regData.RegAngleSpeedPidD = Convert.ToUInt32(txtBoxAngleSpeedDTerm.Text);
+
+            regData.Save();
         }
 
         private void btnSendSerialData_Click(object sender, RoutedEventArgs e)
         {
-            if( false == m_SerialPort.IsOpen)
+            if( null == m_SerialPort || false == m_SerialPort.IsOpen)
             {
                 MessageBox.Show(string.Format("시리얼 포트가 열려있지 않습니다."));
             }
             else
             {
+#if DEVELOPE_MANAGE_SERIAL_DATA
+                CSerialMessage.Msg msg = new CSerialMessage.Msg();
+
+
+                try
+                {
+                    msg.motorSpeed = byte.Parse(txtBoxMotorSpeed.Text);
+
+                    msg.angleKp = uint.Parse(txtBoxAnglePTerm.Text);
+                    msg.angleKi = uint.Parse(txtBoxAngleITerm.Text);
+                    msg.angleKd = uint.Parse(txtBoxAngleDTerm.Text);
+
+                    msg.angleSpeedKp = uint.Parse(txtBoxAngleSpeedPTerm.Text);
+                    msg.angleSpeedKi = uint.Parse(txtBoxAngleSpeedITerm.Text);
+                    msg.angleSpeedKd = uint.Parse(txtBoxAngleSpeedDTerm.Text);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(string.Format($"설정 값 세팅에 실패하였습니다 : {ex.Message}"), "설정값 문자열 -> 값 변환 실패");
+                }
+                
+
+                byte[] serialized = CSerialMessage.Serialize(msg);
+
+                m_SerialPort.Write(serialized, 0, serialized.Length);
+#else
                 if( null != m_SerialData)
                     m_SerialPort.Write(m_SerialData);
+#endif
             }
         }
+
 
         private void SerialValueListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -256,6 +317,41 @@ namespace PlotCSV
             {
                 labelAutoScrollStatus.Content = "Off";
             }
+        }
+
+        private void txtBoxMotorSpeed_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAnglePTerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAngleITerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAngleDTerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAngleSpeedPTerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAngleSpeedITerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
+        }
+
+        private void txtBoxAngleSpeedDTerm_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !RegexChecker.IsNumber(e.Text);
         }
     }
 }

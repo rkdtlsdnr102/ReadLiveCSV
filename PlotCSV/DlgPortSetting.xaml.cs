@@ -24,8 +24,12 @@ namespace PlotCSV
         public int BaudRate { get; set; }
         public string ComName { get; set; }
 
+#if DEVELOPE_MANAGE_REGISTRY
+
+#else
         private readonly string _m_RegComName = "PORT";
         private readonly string _m_RegBaudRate = "BAUDRATE";
+#endif
         public ICommand m_cmdLoadLastPortSetting
         {
             get
@@ -43,7 +47,7 @@ namespace PlotCSV
 
         private void TextBoxBaudRate_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
+            e.Handled = !RegexChecker.IsNumber(e.Text);
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -51,19 +55,39 @@ namespace PlotCSV
             BaudRate = baudrate;
             ComName = TextBoxPortName.Text;
 
+            // 포트 값 저장
+            SavePortSetting(ComName, BaudRate);
+
             Close();
         }
 
-        public void SavePortSetting( string comName, int baudRate)
+        private void SavePortSetting( string comName, int baudRate)
         {
+#if DEVELOPE_MANAGE_REGISTRY
+            RegistryData regData = RegistryData.GetInstance();
+
+            regData.RegPortNum = comName;
+            regData.RegBaudRate = baudRate;
+
+            regData.Save();
+#else
             RegistryManager registryManager = RegistryManager.Instance;
 
             registryManager.SetKeyValue(_m_RegComName, comName);
             registryManager.SetKeyValue(_m_RegBaudRate, Convert.ToString(baudRate));
+#endif
         }
 
         private void LoadLastPortSetting(object obj)
         {
+#if DEVELOPE_MANAGE_REGISTRY
+            RegistryData regData = RegistryData.GetInstance();
+
+            regData.Load();
+
+            TextBoxPortName.Text = regData.RegPortNum;
+            TextBoxBaudRate.Text = Convert.ToString(regData.RegBaudRate);
+#else
             RegistryManager registryManager = RegistryManager.Instance;
 
             string comName, baudRate;
@@ -74,6 +98,7 @@ namespace PlotCSV
                 TextBoxPortName.Text = comName;
                 TextBoxBaudRate.Text = baudRate;
             }
+#endif
 
         }
     }

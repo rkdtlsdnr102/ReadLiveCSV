@@ -23,6 +23,8 @@ namespace PlotCSV
             cur_pos,
             rollAcc,
             pitchAcc,
+            angle_pid_set,
+            rate_pid_set,
             max
         };
 
@@ -113,6 +115,16 @@ namespace PlotCSV
                 case "pitchacc":
                     {
                         recordType = eRecordType.pitchAcc;
+                    }
+                    break;
+                case "angle_pid_set":
+                    {
+                        recordType = eRecordType.angle_pid_set;
+                    }
+                    break;
+                case "rate_pid_set":
+                    {
+                        recordType = eRecordType.rate_pid_set;
                     }
                     break;
 
